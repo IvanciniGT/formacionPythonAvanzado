@@ -43,24 +43,46 @@ print("YA ACABE")
 
 class Contador (Thread):
     
+    deben_parar_todos=False # Variable de clase
+    
+    @classmethod
+    def pararTodos(cls):
+        cls.deben_parar_todos=True
+    
     # Constructor
     def __init__(self, nombre, cantidad, lapso ):
         super().__init__()
         self.nombre=nombre
         self.cantidad=cantidad
         self.lapso=lapso
+        self.debo_parar=False
 
     def run(self):
         for numero in range(1, self.cantidad+1):
+            if self.debo_parar or Contador.deben_parar_todos: 
+                return
             print("Soy " + self.nombre + ": Voy por el " + str(numero) )
             time.sleep(self.lapso) # Pausa... Retrasa la ejecuación del hilo que está corriendo esta linea. 
+    
+    def para(self):
+        self.debo_parar=True
 
 contadorA = Contador("CONTADOR A" , 10, 1 )
 contadorB = Contador("CONTADOR B" ,  5, 2 )
+contadorC = Contador("CONTADOR C" , 50, 1 )
+contadorD = Contador("CONTADOR D" ,500, 1 )
 
 contadorA.start()
 contadorB.start()
+contadorC.start()
+contadorD.start()
 
+time.sleep(5) # hilo principal
+# El hilo principal, a los 5 segundo, pida al ContadorB que deje de contar
+contadorB.para()
+# En 5 segundos más quiero para todos los que queden
+time.sleep(5) # hilo principal
+Contador.pararTodos()
 contadorA.join()
 contadorB.join()
 
