@@ -443,11 +443,26 @@ filtrada=filter(lambda elemento: elemento%2!=0, coleccion)
                 # Filter deja solo los elementos originales cuya transformación valga True
 print(list(filtrada))
 
+
+
+coleccion=(1,2,3,4,5,6)
+
 # Montar vuestra propia fiuncion filter... llamemosla:
 def mi_propia_funcion_filter(funcion_de_filtro, coleccion):
-    return None
+    lista_filtrada=[]
+    for item in coleccion:
+        if funcion_de_filtro(item):
+            lista_filtrada.append(item)
+    return lista_filtrada
 
 filtrada=mi_propia_funcion_filter(lambda elemento: elemento%2!=0, coleccion)
                 # Al aplicar la funcion sobre cada elemento: Un valor lógico: True o False
                 # Filter deja solo los elementos originales cuya transformación valga True
 print(list(filtrada))
+
+#print( str((1,2,3,4,5,6))[1:-1] )
+
+coleccion=(1,2,3,4,5,6)
+coleccion_con_valores_duplicados=map( lambda numero: numero*2 ,coleccion) # lazy
+coleccion_con_valores_duplicados=list(coleccion_con_valores_duplicados)
+print(coleccion_con_valores_duplicados)
