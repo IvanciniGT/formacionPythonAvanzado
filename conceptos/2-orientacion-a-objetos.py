@@ -98,7 +98,7 @@ print( cuadrado1.altura )
 print( cuadrado1.getArea() )
 print( cuadrado1.getPerimetro() )
 
-rectangulo1.base=-5
+#rectangulo1.base=-5
 print( rectangulo1.getArea() )
 
 cuadrado1.base=8 # cagada 
