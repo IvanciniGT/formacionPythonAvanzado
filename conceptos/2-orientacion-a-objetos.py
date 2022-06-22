@@ -74,21 +74,27 @@ class Cuadrado( Rectangulo ):   # Herencia
     def __init__(self, el_lado):
         super().__init__(el_lado, el_lado) # super hace alusión al RECTANGULO
 
-    @property
-    def altura(self):
-        return self.__altura
+#    @property
+#    def altura(self):
+#        return self.__altura
         
-    @altura.setter
+    @Rectangulo.altura.setter
     def altura(self, nuevaAltura):
-        self.__altura=self.__base=nuevaAltura
+        #self.__altura=self.__base=nuevaAltura
+        Rectangulo.altura.fset(self, nuevaAltura)
+        Rectangulo.base.fset(self, nuevaAltura)
 
-    @property
-    def base(self):
-        return self.__altura
+
+#    @property
+#    def base(self):
+#        return self.__altura
         
-    @base.setter
+    @Rectangulo.base.setter
     def base(self, nuevaBase):
-        self.__altura=self.__base=nuevaBase
+        #self.__altura=self.__base=nuevaBase
+        Rectangulo.altura.fset(self, nuevaBase)
+        Rectangulo.base.fset(self, nuevaBase)
+
 
 
 cuadrado1=Cuadrado(5)
