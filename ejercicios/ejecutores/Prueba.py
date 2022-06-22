@@ -7,9 +7,10 @@ def tareaSimple(numero):
 def tareaSimple2(numero):
     def imprimir():
         print("Trabajo " + str(numero))
+        time.sleep(3)
     return imprimir
 
-pool_de_ejecutores1 = PoolDeEjecutores(10, 1)
+pool_de_ejecutores1 = PoolDeEjecutores(3, 1)
  
 for numero in range(10):
     pool_de_ejecutores1.nuevoTrabajo( tareaSimple(numero) )
