@@ -1,38 +1,16 @@
-from enum import Enum
-
-class Estado(Enum):
-    PENDIENTE_INICIO        = 0
-    INICIADO                = 1
-    PAUSADO                 = 2
-    PARADO                  = 3
-    PENDIENTE_FINALIZACION  = 4
-    ACABADO                 = 5
-
-__TRANSICIONES_DE_ESTADO={                                                                              \
-    Estado.PENDIENTE_INICIO: [ Estado.INICIADO ],                                                       \
-    Estado.INICIADO:         [ Estado.PAUSADO, Estado.PARADO, Estado.PENDIENTE_FINALIZACION ],          \
-    Estado.PAUSADO:          [ Estado.INICIADO, Estado.PARADO, Estado.PENDIENTE_FINALIZACION ],         \
-    Estado.PARADO:           [ ],                                                                       \
-    Estado.PENDIENTE_FINALIZACION:  [ Estado.ACABADO ],                                                 \
-    Estado.ACABADO:          [ ]                                                                        \
-}
-
-class StateTransitionException(Exception):
-    
-    def __init__(self, source_state , target_state):
-        super().__init__( "Transición no permitida" )
-        self.source_state = source_state
-        self.target_state = target_state
+from threading import Semaphore
+from Estados import Estado, StateTransitionException, _TRANSICIONES_DE_ESTADO
+from Ejecutor import Ejecutor
 
 class PoolDeEjecutores:
     
     def __init__(self, numero_ejecutores, tiempo_espera ):
         self.__numero_ejecutores      = numero_ejecutores
-        self.tiempo_espera          = tiempo_espera
+        self.tiempo_espera            = tiempo_espera
         self.__trabajos_pendientes    = []
-        self.__estado_pool_ejecutores = None
-        self.__cambiarEstado( Estado.PENDIENTE_INICIO )
-        
+        self.__estado_pool_ejecutores = Estado.PENDIENTE_INICIO
+        #self.__cambiarEstado( Estado.PENDIENTE_INICIO )
+        self.__llaves                 = Semaphore()
         # Creamos ejecutores
         # self.__ejecutores             = []
         # for numero in range (self.__numero_ejecutores):
@@ -45,7 +23,7 @@ class PoolDeEjecutores:
         return self.__estado_pool_ejecutores
         
     def __cambiarEstado(self, nuevoEstado):
-        if nuevoEstado not in __TRANSICIONES_DE_ESTADO[ self.__estado_pool_ejecutores ]:
+        if nuevoEstado not in _TRANSICIONES_DE_ESTADO[ self.__estado_pool_ejecutores ]:
             raise StateTransitionException(self.__estado_pool_ejecutores, nuevoEstado)
         self.__estado_pool_ejecutores = nuevoEstado
         
@@ -57,10 +35,14 @@ class PoolDeEjecutores:
                 ejecutor.start()
     
     def recuperarTrabajo(self):
-        # Sincronizado
-        # Asegurarnos que solo 1 hilo hace esto
-        return None
-    
+        trabajo_a_devolver = None
+        self.__llaves.acquire()    # Coje las llaves y cuando las tengas entra
+                                   # Si no estan las llaves en su sitio, espera
+        if len( self.__trabajos_pendientes ) > 0:   
+            trabajo_a_devolver = self.__trabajos_pendientes.pop()
+        self.__llaves.release()    # Deja las llaves en su sitiop, para el proximo
+        return trabajo_a_devolver
+
     def nuevoTrabajo( self, funcion_a_ejecutar ):
         if self.__estado_pool_ejecutores == Estado.PARADO:
             raise ValueError("No se admiten más trabajos")
