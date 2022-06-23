@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+    miapp:
+        container_name: miapp
+        #build: .
+        build:
+            context: .
+            version: "3"
+
+#    miapp2:
+#        container_name: miapp2
+#        image: ejecutores_miapp:latest
+            
