@@ -1,4 +1,5 @@
 from PoolDeEjecutores import PoolDeEjecutores
+from Promesa import Estado
 import time 
 
 def tareaSimple(numero):
@@ -9,31 +10,38 @@ def tareaSimple(numero):
     return funcion
 
 
-def trabajoProcesado( dato ):
+def trabajoProcesado( numero ):
+    def callback (dato):
     # Necesito saber de que trabajo es este dato
-    print("Valor devuelto: " + dato)
+        print("Valor devuelto: " + str(dato) +" para el numero: " + str(numero) )
+    return callback
 
 
 
 
 pool_de_ejecutores1 = PoolDeEjecutores(3, 1)
-lista_promesas=[]
-for numero in range(10):
+lista_promesas={}
+for numero in range(5):
     # Sincrona
-    pool_de_ejecutores1.nuevoTrabajo( tareaSimple(numero) , trabajoProcesado )
+    pool_de_ejecutores1.nuevoTrabajo( tareaSimple(numero) , trabajoProcesado(numero) )
     # Asincrona
-    lista_promesas.append( pool_de_ejecutores1.nuevoTrabajo( tareaSimple(numero) ) )
+    lista_promesas[numero]=( pool_de_ejecutores1.nuevoTrabajo( tareaSimple(numero) ) )
 
 pool_de_ejecutores1.comienza()
 pool_de_ejecutores1.esperarFinalizacionDeTrabajos()
 
 #HAGO OTRAS COSAS ANTES
-
-while len(lista_promesas) > 0
-    for item in lista_promesas:
-        if item.estado == EstadoPromomesa.Resuelta:
-            print( item.valor )
-            lista_promesas.remove(item)
+pendientes={}
+while len(lista_promesas) > 0:
+    for clave,promesa in lista_promesas.items(): # item tendría la clave
+        if promesa.estado == Estado.RESULETA:
+            print( "Para el numero " + str(clave) +" tengo el valor "+ str(promesa.valor ))
+        else:
+            pendientes[clave]= promesa
+    # LAs no acabadas la muevo a un diccionario temporal que reasigno
+    lista_promesas = pendientes
+    #del lista_promesas[clave]
+    
     time.sleep(1)
 
 # Dentro de la lista de promesas será una Promesa

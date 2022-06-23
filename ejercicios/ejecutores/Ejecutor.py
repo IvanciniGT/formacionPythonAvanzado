@@ -1,5 +1,6 @@
 from threading import Thread
 from Estados import Estado
+from Promesa import Estado as EstadoPromesa
 import time
 
 class Ejecutor( Thread ):
@@ -17,10 +18,23 @@ class Ejecutor( Thread ):
             # Si no estoy pausado
             if self.pool_de_ejecutores.estado_pool_ejecutores != Estado.PAUSADO:
                 # Saco curro
-                proximo_trabajo = self.pool_de_ejecutores.recuperarTrabajo()
+                proximo_trabajo, callback, promesa = self.pool_de_ejecutores.recuperarTrabajo()
                 if  proximo_trabajo: # Si hay curro
                     # hacerTrabajo
-                    proximo_trabajo()
+                    try:
+                        valor=proximo_trabajo()
+                    except Exception as error:
+                        promesa.error = error
+                        promesa.estado = EstadoPromesa.ERROR
+                    else:
+                        promesa.valor = valor
+                        promesa.estado = EstadoPromesa.RESULETA
+                        try:
+                            if callback:
+                                callback(valor)
+                        except Exception as error:
+                            print("Error al invocar funcion de callback: " + str(error))
+                            
                     continue # Evitar la siesta
                 if self.pool_de_ejecutores.estado_pool_ejecutores == Estado.PENDIENTE_FINALIZACION:
                     break
