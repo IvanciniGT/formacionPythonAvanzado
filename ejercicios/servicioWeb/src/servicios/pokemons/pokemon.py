@@ -19,6 +19,10 @@ class Pokemon(ObjetoPersistente, base_datos.Model):
         self.evolucion = evolucion
         self.ataque_estrella = ataque_estrella
  
+    @staticmethod
+    def instanciarDesdeDiccionario(dict):
+        return Pokemon(dict["nombre"], dict["clase"] , dict["evolucion"], dict["ataque_estrella"])
+ 
 # Tener una tabla en una BBDD con un monton de Pokemons
 
 #pikachu = Pokemon("Pikachu", "Electrico", "Raichu", "Impactrueno")
