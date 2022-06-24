@@ -16,7 +16,7 @@ function crearBaseDatos(){
 function estructuraBaseDatos(){
     entorno
     flask db migrate -m 'version1' # Pedir a migrate que nos genere una version de la BBDD con un mensaje de confirmacion
-    flask db update    
+    flask db upgrade    
 }
 function iniciar(){
     entorno

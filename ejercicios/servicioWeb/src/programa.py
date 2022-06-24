@@ -9,3 +9,4 @@ servidor_flask.config.from_object(configuracion) # Establecer configuración bas
                                                  # Puerto...
                                                  # tipo de entorno: Desarrollo, produccion
 configurarServicios(servidor_flask)              # Alta de los servicios en el servidor de flask
+#servidor_flask.run()
