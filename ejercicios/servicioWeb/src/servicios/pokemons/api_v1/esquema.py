@@ -2,7 +2,7 @@
 # Cuando le pidamos que serialice un objeto, usará un determinado esquema
 # JSON v1
 
-from marshallow import fields
+from marshmallow import fields
 from servicios.inicializador import serializador_json        # ruta absoluta
 #from ...inicializador import serializador_json              # ruta relativa
 

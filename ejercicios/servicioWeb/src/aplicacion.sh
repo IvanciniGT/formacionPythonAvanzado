@@ -1,7 +1,9 @@
 #!/bin/bash
+# Este archivo lo cargo con: 
+# $ . aplicacion.sh
 
 function dependencias(){
-    pip3 install -r ../requiremenets.txt
+    pip3 install -r ../requirements.txt
 }
 function entorno(){
     export FLASK_ENV="development"

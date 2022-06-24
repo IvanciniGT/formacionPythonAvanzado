@@ -1,5 +1,5 @@
 
-from inicializador import base_datos, serializador_json, gestor_estructura_base_datos, mi_blueprint
+from .inicializador import base_datos, serializador_json, gestor_estructura_base_datos, mi_blueprint
 from servicios.pokemons.api_v1.endpoints import registrarAPIPokemons
 
 def configurarServicios(servidor_flask):

@@ -5,7 +5,7 @@ from flask_restful import Resource, Api         # Definición de un ENDPOINT
 
 from servicios.pokemons.pokemon import Pokemon  # MODELO concreto
 
-from esquema import esquema_para_pokemons       # Serializados/desserializados a JSON del modelo concreto
+from .esquema import esquema_para_pokemons       # Serializados/desserializados a JSON del modelo concreto
 
 from flask import request                       # Datos de la peticion que nos han hecho por HTTP
 
