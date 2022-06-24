@@ -46,7 +46,7 @@ class EndpointsPokemons (Resource):
         return json_a_devolver, codigo_respuesta
 
 
-def crearAPI(blueprint):            # flask: Coleccion de API servicios que ofrecemos
+def registrarAPIPokemons(blueprint):            # flask: Coleccion de API servicios que ofrecemos
     api_pokemons_v1 = Api(blueprint)    # Creamos un API que es una coleccion de endpoints
     api_pokemons_v1.add_resource( EndpointsPokemons , '/api/v1/pokemons' )  # añadir endpoints
 
